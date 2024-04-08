@@ -28,7 +28,9 @@ WHERE food_exotic is true;
 
  -- 5. Проверить,что созданные данные для "Пепино" удалились из таблицы.
  SELECT *
-  FROM food;                                                                       /* или так*/                                                                                       SELECT food_id, food_name, fo   d_type, food_exotic
+  FROM food;
+  /* или так*/
+ SELECT food_id, food_name, fo   d_type, food_exotic
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
@@ -63,7 +65,9 @@ WHERE food_exotic is true;
 
  -- 5. Проверить,что созданные данные для "Арбуз" удалились из таблицы.
  SELECT *
-  FROM food;                                                                                                                                           /* или так*/                                                                                       SELECT food_id, food_name, food_type, food_exotic
+  FROM food;
+     /* или так*/
+    SELECT food_id, food_name, food_type, food_exotic
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
