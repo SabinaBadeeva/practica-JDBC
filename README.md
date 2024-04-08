@@ -28,8 +28,8 @@ WHERE food_exotic is true;
 
  -- 5. Проверить,что созданные данные для "Пепино" удалились из таблицы.
  SELECT *
-  FROM food;    <br>
-      /* или так*/         <br>
+  FROM food;    
+      /* или так*/         
  SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
@@ -65,8 +65,8 @@ WHERE food_exotic is true;
 
  -- 5. Проверить,что созданные данные для "Арбуз" удалились из таблицы.
   SELECT *
-  FROM food;    <br>
-      /* или так*/         <br>
+  FROM food;    
+      /* или так*/         
  SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
@@ -104,8 +104,8 @@ WHERE food_exotic is false;
 
  -- 5. Проверить,что созданные данные для "Морковь" удалились из таблицы.
  SELECT *
-  FROM food;    <br>
-      /* или так*/         <br>
+  FROM food;    
+      /* или так*/         
  SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
@@ -140,8 +140,8 @@ WHERE food_exotic is false;
 
  -- 5. Проверить,что созданные данные для "Слива" удалились из таблицы.
  SELECT *
-  FROM food;    <br>
-      /* или так*/         <br>
+  FROM food;    
+      /* или так*/         
  SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
