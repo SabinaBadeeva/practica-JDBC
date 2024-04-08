@@ -2,6 +2,7 @@
 ## Скрипт для тестов по классу Экзотические продукты
 ### добавить продукты Овощ, Фрукт (с активным чекбоксом Экзотический)
 ```
+
 /*Внести данные в таблицу*/
 INSERT INTO food (H3 food_name, food_type, food_exotic )
 VALUES (5, 'Пепино', 'Vegetable', 1 );
@@ -35,7 +36,7 @@ FROM food;
     COUNT (food_name) AS all_food
  FROM food;
 
-ДОБАВИТЬ ФРУКТ (с активным чекбоксом Экзотический)
+------------------------------------------------
 
 /*Внести данные в таблицу*/
 INSERT INTO food (H3 food_name, food_type, food_exotic )
@@ -73,7 +74,7 @@ FROM food;
 ## Скрипт для тестов по классу не Экзотические продукты
 ### Добавить продукты Овощ, Фрукт (с не активным чекбоксом Экзотический)
 ```
-Добавить Овощ
+
 /*Внести данные в таблицу*/
 INSERT INTO food (H3 food_name, food_type, food_exotic )
 VALUES (5, 'Морковь', 'Vegetable', 0 );
@@ -107,7 +108,7 @@ FROM food;
     COUNT (food_name) AS all_food
  FROM food; 
 
-Добавить Фрукт
+----------------------------------------
 /*Внести данные в таблицу*/
 INSERT INTO food (H3 food_name, food_type, food_exotic )
 VALUES (5, 'Слива', 'Fruit', 0 );
