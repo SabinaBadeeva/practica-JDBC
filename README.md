@@ -28,9 +28,9 @@ WHERE food_exotic is true;
 
  -- 5. Проверить,что созданные данные для "Пепино" удалились из таблицы.
  SELECT *
-  FROM food;
-  /* или так*/
- SELECT food_id, food_name, fo   d_type, food_exotic
+  FROM food;    <br>
+      /* или так*/         <br>
+ SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
@@ -64,10 +64,10 @@ WHERE food_exotic is true;
  WHERE food_id = 5; 
 
  -- 5. Проверить,что созданные данные для "Арбуз" удалились из таблицы.
- SELECT *
-  FROM food;
-     /* или так*/
-    SELECT food_id, food_name, food_type, food_exotic
+  SELECT *
+  FROM food;    <br>
+      /* или так*/         <br>
+ SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
@@ -104,7 +104,9 @@ WHERE food_exotic is false;
 
  -- 5. Проверить,что созданные данные для "Морковь" удалились из таблицы.
  SELECT *
-  FROM food;                                                                                                                                           /* или так*/                                                                                       SELECT food_id, food_name, food_type, food_exotic
+  FROM food;    <br>
+      /* или так*/         <br>
+ SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
@@ -138,11 +140,13 @@ WHERE food_exotic is false;
 
  -- 5. Проверить,что созданные данные для "Слива" удалились из таблицы.
  SELECT *
-```
-  FROM food;                                                                                                                                           /* или так*/                                                                                       SELECT food_id, food_name, food_type, food_exotic
+  FROM food;    <br>
+      /* или так*/         <br>
+ SELECT food_id, food_name, food_type, food_exotic<br>
 FROM food; 
 
  -- 6. Проверить,что всего начальных позиций 4.
  SELECT
     COUNT (food_name) AS all_food
- FROM food; 
+ FROM food;
+```
