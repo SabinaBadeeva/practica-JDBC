@@ -1,18 +1,25 @@
 import jdk.jfr.Description;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.testng.Assert;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.List;
 
-public class TestExoticProduct extends StockExchangeDB{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+public class TestExoticProduct extends StockExchangeDB {
     public TestExoticProduct() throws SQLException {
     }
 
     @Test
     @Description(" Получить начальные данные " +
-            "(food_id, food_name, food_type, food_exotic (где 1 = true, 0 = false)" +
+            "( food_name, food_type, food_exotic (где 1 = true, 0 = false)" +
             " из таблицы Food " +
             "метод: Select * From food ")
     public void getProductDB() throws SQLException {
@@ -29,42 +36,40 @@ public class TestExoticProduct extends StockExchangeDB{
         // с помощью которого переходим к следующему элементу
         int count = 0;
         while (rs.next()) {
-            Integer id = rs.getInt("food_id");
             String name = rs.getString("food_name");
             String type = rs.getString("food_type");
             String isExotic = rs.getString("food_exotic");
             //Вывести результат запроса
-            String output = "Товар №%d: %s - %s - %s - %s";
-            System.out.println(String.format(output, ++count, id, name, type, isExotic));
+            String output = "Товар №%d: %s - %s - %s";
+            System.out.println(String.format(output, ++count, name, type, isExotic));
         }
     }
 
     @Test
     @Description("Добавление товара по типу Овощ и Фрукт с активным чекбоксом экзотический." +
-            " INSERT INTO food (food_id, food_name, food_type, food_exotic )" +
-            " VALUES (5, 'Пепино', 'Vegetable', 1)" +
-            "      и (6, 'Арбуз', 'Fruit', 1;" +
+            " INSERT INTO food ( food_name, food_type, food_exotic )" +
+            " VALUES ( 'Пепино', 'Vegetable', 1)" +
+            "      и ( 'Арбуз', 'Fruit', 1;" +
             "При успешном добавлении проверить: " +
-            "что новый продукт  Пепино с типом Овощ и значением not exotic = true добавился в таблицу" +
-            "что новый продукт  Арбуз с типом Fruit и значением not exotic = true добавился в таблицу")
+            "что новый продукт  Пепино с типом Овощ и значением  exotic = true добавился в таблицу" +
+            "что новый продукт  Арбуз с типом Fruit и значением  exotic = true добавился в таблицу")
     public void addNewProdNotExotic() throws SQLException {
         // подключить Базу Данных
         dataBaseConnect();
-        String insert = "insert into food (food_id, food_name, food_type, food_exotic) values (?, ?, ?, ?)";
+        String insert = "insert into food ( food_name, food_type, food_exotic) values ( ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(insert);
 
         // Добавить данные
         Object[][] data = {
-                {5, "Пепино", "Vegetable", true},
-                {6, "Арбуз", "Fruit", true},
+                {"Пепино", "Vegetable", true},
+                {"Арбуз", "Fruit", true},
 
         };
         // Добавить batches параметры
         for (Object[] row : data) {
-            ps.setInt(1, (int) row[0]); // id
-            ps.setString(2, (String) row[1]); // name
-            ps.setString(3, (String) row[2]); // type
-            ps.setBoolean(4, (Boolean) row[3]); // exotic
+            ps.setString(1, (String) row[0]); // name
+            ps.setString(2, (String) row[1]); // type
+            ps.setBoolean(3, (Boolean) row[2]); // exotic
             ps.addBatch();
         }
         // Выполнить batches
@@ -74,8 +79,8 @@ public class TestExoticProduct extends StockExchangeDB{
 //        // Проверить, что добавились нужные товары с нужными значениями
         String sql = "SELECT * FROM food order by food_id desc limit 2";
         //PreparedStatement для параметризованного SQL-запроса
-        PreparedStatement preparedStatement = con.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery();
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        ResultSet resultSet = pstmt.executeQuery();
         //Проверить, что в таблице появился новый товар с необходимыми параметрами
         int count = 0;
         while (resultSet.next()) {
@@ -94,17 +99,19 @@ public class TestExoticProduct extends StockExchangeDB{
         // подключить Базу Данных
         dataBaseConnect();
         //Ввести запрос
-        String sql = "DELETE FROM food WHERE food_id=?";
-
+        String sql = "DELETE FROM food WHERE food_name=?";
         PreparedStatement statement = con.prepareStatement(sql);
-        statement.setInt(1, 6);
-
-        int rowsDeleted = statement.executeUpdate();
-        if (rowsDeleted > 0) {
-            System.out.println("\n====================\n");
-            System.out.println("Товар успешно удален");
-            System.out.println("\n====================\n");
-        }
+        statement.setString(1, "Пепино");
+        statement.executeUpdate();
+        String sqlSel = "SELECT * FROM food";
+        PreparedStatement pstamt = con.prepareStatement(sqlSel);
+        ResultSet rsDel = pstamt.executeQuery();
+        //Проверить,что товар удалился
+        rsDel.last();
+        Assertions.assertFalse("Пепино".equals(rsDel.getString("food_name"))
+                        && ("Vegetable".equals(rsDel.getString("food_type")))
+                        && (Boolean.valueOf(true).equals(rsDel.getBoolean("food_exotic"))),
+                "Товар не удалился");
     }
 
     @Test
@@ -113,16 +120,69 @@ public class TestExoticProduct extends StockExchangeDB{
         // подключить Базу Данных
         dataBaseConnect();
         //Ввести запрос
-        String sql = "DELETE FROM food WHERE food_id=?";
-
+        String sql = "DELETE FROM food WHERE food_name=?";
         PreparedStatement statement = con.prepareStatement(sql);
-        statement.setInt(1, 5);
-
-        int rowsDeleted = statement.executeUpdate();
-        if (rowsDeleted > 0) {
-            System.out.println("Товар успешно удален");
-        }
+        statement.setString(1, "Арбуз");
+        statement.executeUpdate();
+        String sqlSel = "SELECT * FROM food";
+        PreparedStatement pstamt = con.prepareStatement(sqlSel);
+        ResultSet rsDel = pstamt.executeQuery();
+        //Проверить,что товар удалился
+        rsDel.last();
+        Assertions.assertFalse("Арбуз".equals(rsDel.getString("food_name"))
+                        && ("Fruit".equals(rsDel.getString("food_type")))
+                        && (Boolean.valueOf(true).equals(rsDel.getBoolean("food_exotic"))),
+                "Товар не удалился");
     }
+
+    @Test
+    @Description("Добавление товара по типу  Фрукт с активным чекбоксом экзотический " +
+            "INSERT INTO food ( food_name, food_type, food_exotic )" +
+            "VALUES ( 'Манго', 'Vegetable', 1) " +
+            "При успешном добавлении проверить: " +
+            "что новый продукт  Манго с типом Фрукт и значением exotic = true добавился в таблицу" +
+            "Удалить товар из таблицы" +
+            "Проверить,что товар успешно удален")
+    public void addProd() throws SQLException {
+        dataBaseConnect();
+        //Добавить новый товар
+        String sql = "insert into food (food_name, food_type, food_exotic) values ( ?, ?, ?)";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, "Манго");
+        pstmt.setString(2, "Fruit");
+        pstmt.setBoolean(3, true);
+        pstmt.executeUpdate();
+        //Проверить,что товар добавился
+        String sqlSel = "SELECT * FROM food";
+        PreparedStatement pstamt = con.prepareStatement(sqlSel);
+        ResultSet rs = pstamt.executeQuery();
+        rs.last();
+        Assertions.assertAll(" В таблице присутствует товар с значениями Манго, Fruit, true",
+                () -> assertEquals(rs.getString("food_name"), "Манго"),
+                () -> assertEquals(rs.getString("food_type"), "Fruit"),
+                () -> assertEquals(rs.getBoolean("food_exotic"), true)
+        );
+    }
+
+    @Test
+    @Description("Удалить новый товар Манго из таблицы")
+    public void deleteNewProductNotExotic() throws SQLException {
+        dataBaseConnect();
+        String sqlDel = "DELETE FROM food WHERE food_name=?";
+        PreparedStatement statm = con.prepareStatement(sqlDel);
+        statm.setString(1, "Манго");
+       statm.executeUpdate();
+        String sqlSel = "SELECT * FROM food";
+        PreparedStatement pstamt = con.prepareStatement(sqlSel);
+        ResultSet rsDel = pstamt.executeQuery();
+      //Проверить,что товар удалился
+        rsDel.last();
+        Assertions.assertFalse("Манго".equals(rsDel.getString("food_name"))
+                        && ("Fruit".equals(rsDel.getString("food_type")))
+                        && (Boolean.valueOf(true).equals(rsDel.getBoolean("food_exotic"))),
+                "Товар не удалился");
+    }
+
 
     @Test
     @Description("Проверить, что в таблице осталось " +
@@ -137,7 +197,7 @@ public class TestExoticProduct extends StockExchangeDB{
         String sql = "SELECT COUNT (*) FROM food";
         //Вернуть Result
         ResultSet rs = stmt.executeQuery(sql);
-        //чтобы вывести данные используем метод next() ,
+//        //чтобы вывести данные используем метод next() ,
         rs.next();
         //Вывести количество строк
         System.out.println("\n====================\n");
