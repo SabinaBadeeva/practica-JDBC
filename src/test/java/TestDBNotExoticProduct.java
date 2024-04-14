@@ -45,29 +45,28 @@ public class TestDBNotExoticProduct extends StockExchangeDB {
     @Test
     @Description("Добавление товара по типу Овощ и Фрукт с не активным чекбоксом экзотический." +
             " INSERT INTO food (food_id, food_name, food_type, food_exotic )" +
-            " VALUES (5, 'Морковь', 'Vegetable', 0 )" +
-            "      и (6, 'Слива', 'Fruit', 0;" +
+            " VALUES ( 'Морковь', 'Vegetable', 0 )" +
+            "      и ( 'Слива', 'Fruit', 0;" +
             "При успешном добавлении проверить: " +
             "что новый продукт  Морковь с типом Овощ и значением not exotic = false добавился в таблицу" +
             "что новый продукт  Слива с типом Fruit и значением not exotic = false добавился в таблицу")
     public void addNewProdNotExotic() throws SQLException {
         // подключить Базу Данных
         dataBaseConnect();
-        String insert = "insert into food (food_id, food_name, food_type, food_exotic) values (?, ?, ?, ?)";
+        String insert = "insert into food ( food_name, food_type, food_exotic) values ( ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(insert);
 
         // Добавить данные
         Object[][] data = {
-                {5, "Морковь", "Vegetable", false},
-                {6, "Слива", "Fruit", false},
+                { "Морковь", "Vegetable", false},
+                { "Слива", "Fruit", false},
 
         };
         // Добавить batches параметры
         for (Object[] row : data) {
-            ps.setInt(1, (int) row[0]); // id
-            ps.setString(2, (String) row[1]); // name
-            ps.setString(3, (String) row[2]); // type
-            ps.setBoolean(4, (Boolean) row[3]); // exotic
+            ps.setString(1, (String) row[0]); // name
+            ps.setString(2, (String) row[1]); // type
+            ps.setBoolean(3, (Boolean) row[2]); // exotic
             ps.addBatch();
         }
         // Выполнить batches
@@ -97,11 +96,9 @@ public class TestDBNotExoticProduct extends StockExchangeDB {
         // подключить Базу Данных
         dataBaseConnect();
         //Ввести запрос
-        String sql = "DELETE FROM food WHERE food_id=?";
-
+        String sql = "DELETE FROM food WHERE food_name=?";
         PreparedStatement statement = con.prepareStatement(sql);
-        statement.setInt(1, 6);
-
+        statement.setString(1, "Морковь");
         int rowsDeleted = statement.executeUpdate();
         if (rowsDeleted > 0) {
             System.out.println("\n====================");
@@ -116,11 +113,9 @@ public class TestDBNotExoticProduct extends StockExchangeDB {
         // подключить Базу Данных
         dataBaseConnect();
         //Ввести запрос
-        String sql = "DELETE FROM food WHERE food_id=?";
-
+        String sql = "DELETE FROM food WHERE food_name=?";
         PreparedStatement statement = con.prepareStatement(sql);
-        statement.setInt(1, 5);
-
+        statement.setString(1, "Слива");
         int rowsDeleted = statement.executeUpdate();
         if (rowsDeleted > 0) {
             System.out.println("Товар успешно удален");
@@ -151,13 +146,12 @@ public class TestDBNotExoticProduct extends StockExchangeDB {
         //чтобы вывести данные используем метод next() ,
         int count = 0;
         while (rs1.next()) {
-            Integer id = rs1.getInt("food_id");
             String name = rs1.getString("food_name");
             String type = rs1.getString("food_type");
             String isExotic = rs1.getString("food_exotic");
             //Вывести результат запроса
-            String output = "Товар №%d: %s - %s - %s - %s";
-            System.out.println(String.format(output, ++count, id, name, type, isExotic));
+            String output = "Товар №%d: %s - %s - %s";
+            System.out.println(String.format(output, ++count, name, type, isExotic));
         }
     }
 }

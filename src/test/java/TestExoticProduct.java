@@ -138,7 +138,7 @@ public class TestExoticProduct extends StockExchangeDB {
     @Test
     @Description("Добавление товара по типу  Фрукт с активным чекбоксом экзотический " +
             "INSERT INTO food ( food_name, food_type, food_exotic )" +
-            "VALUES ( 'Манго', 'Vegetable', 1) " +
+            "VALUES ( 'Манго', 'Fruit', 1) " +
             "При успешном добавлении проверить: " +
             "что новый продукт  Манго с типом Фрукт и значением exotic = true добавился в таблицу" +
             "Удалить товар из таблицы" +
